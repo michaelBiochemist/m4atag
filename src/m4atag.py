@@ -64,7 +64,7 @@ def set_tags(args):
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--track-title", help="Title of the track")
-    parser.add_argument("-b", "--album", help="Track Album"")
+    parser.add_argument("-b", "--album", help="Track Album")
     parser.add_argument("-a", "--artist", help="Track Artist")
     parser.add_argument("-A", "--album-artist", help="Track Album Artist")
     parser.add_argument("-y", "--year", help="Year Album was released")
