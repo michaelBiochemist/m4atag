@@ -4,65 +4,6 @@ from mutagen.mp4 import MP4
 from tags import tag_dict
 
 
-arg_dict = {
-    "t": "track_title",
-    "b": "album",
-    "a": "artist",
-    "aa": "album_artist",
-    #'': 'composer',
-    "y": "year"
-    #'c': 'comment',
-    #'': 'description (usually used in podcasts)',
-    #'': 'purchase date',
-    #'': 'grouping',
-    #'': 'genre',
-    #'': 'lyrics',
-    #'': 'podcast URL',
-    #'': 'podcast episode GUID',
-    #'': 'podcast category',
-    #'': 'podcast keywords',
-    #'': 'encoded by',
-    #'': 'copyright',
-    #'': 'album sort order',
-    #'': 'album artist sort order',
-    #'': 'artist sort order',
-    #'': 'title sort order',
-    #'': 'composer sort order',
-    #'': 'show sort order',
-    #'': 'show name',
-    #'': 'work',
-    #'': 'movement'
-}
-
-
-def get_tags(filename: str):
-    tags = dict()
-    for akey in arg_dict.keys():
-        print(
-            arg_dict[akey]
-            + ": "
-            + (MP4(filename).tags.get(tag_dict[arg_dict[akey]], [None])[-1] or "")
-        )
-
-
-def set_description(filename: str, description: str):
-    tags = MP4(filename).tags
-    tags["desc"] = description
-    tags.save(filename)
-
-
-def set_tags(args):
-    "Loops through all args that can be set as tags and sets them."
-    tags = MP4(args.filename).tags
-    for arg in vars(args):
-        val = getattr(args, arg)
-        if arg in tag_dict.keys() and val is not None:
-            print(f"Setting tag {arg} to value {val}...")
-            actual_tag = tag_dict[arg]
-            tags[actual_tag] = val
-    tags.save(args.filename)
-
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--track-title", help="Title of the track")
@@ -78,10 +19,22 @@ def parse_args():
     return args
 
 
+def set_tags(args):
+    "Loops through all args that can be set as tags and sets them."
+    tags = MP4(args.filename).tags
+    for arg in vars(args):
+        val = getattr(args, arg)
+        if arg in tag_dict.keys() and val is not None:
+            print(f"Setting tag {arg} to value {val}...")
+            actual_tag = tag_dict[arg]
+            tags[actual_tag] = val
+    tags.save(args.filename)
+
+
 def main():
     args = parse_args()
     if args.get_tags:
-        get_tags(args.filename)
+        print(MP4(args.filename).tags)
     else:
         set_tags(args)
 
