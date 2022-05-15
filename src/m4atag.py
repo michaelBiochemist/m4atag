@@ -3,6 +3,7 @@ import argparse
 from mutagen.mp4 import MP4
 from tags import tag_dict
 
+
 arg_dict = {
     "t": "track_title",
     "b": "album",
@@ -51,20 +52,21 @@ def set_description(filename: str, description: str):
 
 
 def set_tags(args):
-
+    "Loops through all args that can be set as tags and sets them."
     tags = MP4(args.filename).tags
     for arg in vars(args):
         val = getattr(args, arg)
         if arg in tag_dict.keys() and val is not None:
-            print(arg)
-            tags[tag_dict[arg]] = val
+            print(f"Setting tag {arg} to value {val}...")
+            actual_tag = tag_dict[arg]
+            tags[actual_tag] = val
     tags.save(args.filename)
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--track-title", help="Title of the track")
-    parser.add_argument("-b", "--album", help="Track Album"")
+    parser.add_argument("-b", "--album", help="Track Album")
     parser.add_argument("-a", "--artist", help="Track Artist")
     parser.add_argument("-A", "--album-artist", help="Track Album Artist")
     parser.add_argument("-y", "--year", help="Year Album was released")
