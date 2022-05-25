@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import argparse
 from mutagen.mp4 import MP4
-from src.m4atag.tags import tag_lookup, reverse_tag_lookup
+from m4atag.tags import tag_lookup, reverse_tag_lookup
 
 
 def parse_args():

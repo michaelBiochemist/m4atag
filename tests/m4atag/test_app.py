@@ -1,6 +1,6 @@
 import sys
 import pytest
-from src.m4atag.m4atag import parse_args, get_tags, set_tags
+from m4atag.app import parse_args, get_tags, set_tags
 
 
 def test_set_tags(capsys):
