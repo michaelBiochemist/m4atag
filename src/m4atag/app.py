@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 import argparse
 from mutagen.mp4 import MP4
-from m4atag.tags import tag_lookup, reverse_tag_lookup
+#from m4atag.tags import tag_lookup, reverse_tag_lookup
+from tags import tag_lookup, reverse_tag_lookup
 
 
 def parse_args():
@@ -28,7 +29,10 @@ def get_tags(filename: str) -> None:
 
 def set_tags(args) -> None:
     "Loops through all args that can be set as tags and sets them."
+    has_tags = True
     file_tags = MP4(args.filename).tags
+    if file_tags == None:
+        file_tags = MP4.MP4Tags()
     for arg in vars(args):
         arg_val = getattr(args, arg)
         if arg in tag_lookup.keys() and arg_val is not None:
