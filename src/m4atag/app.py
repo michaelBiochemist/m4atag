@@ -1,8 +1,8 @@
-#!/usr/bin/python3
 import argparse
+
 from mutagen.mp4 import MP4
-#from m4atag.tags import tag_lookup, reverse_tag_lookup
-from tags import tag_lookup, reverse_tag_lookup
+
+from m4atag.tags import reverse_tag_lookup, tag_lookup
 
 
 def parse_args():
@@ -12,9 +12,15 @@ def parse_args():
     parser.add_argument("-a", "--artist", help="Track Artist")
     parser.add_argument("-A", "--album-artist", help="Track Album Artist")
     parser.add_argument("-y", "--year", help="Year Album was released")
-    parser.add_argument("-T", "--track-number-total-tracks", nargs="+", help="Total number of tracks")
-    parser.add_argument("-D", "--disk-number-total-disks", nargs="+", help="Total number of discs")
-    parser.add_argument("-g", "--get-tags", action="store_true", help="Only print the tags")
+    parser.add_argument(
+        "-T", "--track-number-total-tracks", nargs="+", help="Total number of tracks"
+    )
+    parser.add_argument(
+        "-D", "--disk-number-total-disks", nargs="+", help="Total number of discs"
+    )
+    parser.add_argument(
+        "-g", "--get-tags", action="store_true", help="Only print the tags"
+    )
     parser.add_argument("filename", help="File path to the track.")
     args = parser.parse_args()
     return args
@@ -29,9 +35,8 @@ def get_tags(filename: str) -> None:
 
 def set_tags(args) -> None:
     "Loops through all args that can be set as tags and sets them."
-    has_tags = True
     file_tags = MP4(args.filename).tags
-    if file_tags == None:
+    if file_tags is None:
         file_tags = MP4.MP4Tags()
     for arg in vars(args):
         arg_val = getattr(args, arg)
