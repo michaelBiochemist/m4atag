@@ -30,6 +30,7 @@ tag_lookup = OrderedDict({
     "movement": "\xa9mvn",
     "track_number_total_tracks": "trkn",
     "disk_number_total_disks": "disk",
+    "cover_art":"covr",
 })
 "Tag keys in mutagen are not human-readable. This dict maps human-readable keys to mutagen keys."
 
