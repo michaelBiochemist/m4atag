@@ -1,11 +1,9 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 import argparse
 from mutagen.mp4 import MP4,MP4Cover
 import imghdr as im
-#from m4atag.tags import tag_lookup, reverse_tag_lookup
-from tags import tag_lookup, reverse_tag_lookup
-
-import pdb
+from m4atag.tags import tag_lookup, reverse_tag_lookup
 
 def parse_args():
     parser = argparse.ArgumentParser(description="M4A Tag Editor")
@@ -26,8 +24,6 @@ def parse_args():
 
     parser_cov = subparsers.add_parser("im",help="Handle image cover art")
     parser_cov.add_argument("image_file",help="Name of image file")
-    #parser.add_argument("-g", "--get-tags", action="store_true", help="Only print the tags")
-    #parser.add_argument("-im", "--track-image", nargs="+", help="Total number of tracks")
     args = parser.parse_args()
     return args
 
@@ -67,7 +63,7 @@ def get_tags(filename: str) -> None:
 def set_tags(args) -> None:
     "Loops through all args that can be set as tags and sets them."
     file_tags = MP4(args.filename).tags
-    if file_tags == None:
+    if file_tags is None:
         file_tags = MP4.MP4Tags()
     for arg in vars(args):
         arg_val = getattr(args, arg)

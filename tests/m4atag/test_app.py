@@ -1,10 +1,19 @@
 import sys
-import pytest
-from m4atag.app import parse_args, get_tags, set_tags
+
+from m4atag.app import get_tags, parse_args, set_tags
 
 
 def test_set_tags(capsys):
-    sys.argv = ["m4atag.py", "-t", "Scape Main", "-b", "RS2", "-a", "Jagex", "tests/m4atag/runscape.m4a"]
+    sys.argv = [
+        "m4atag.py",
+        "-t",
+        "Scape Main",
+        "-b",
+        "RS2",
+        "-a",
+        "Jagex",
+        "tests/m4atag/runescape.m4a",
+    ]
     args = parse_args()
     set_tags(args)
     captured = capsys.readouterr()
@@ -15,8 +24,11 @@ def test_set_tags(capsys):
 
 
 def test_get_tags(capsys):
-    sys.argv = ["m4atag.py", "-g", "tests/m4atag/runscape.m4a"]
+    sys.argv = ["m4atag.py", "-g", "tests/m4atag/runescape.m4a"]
     args = parse_args()
     get_tags(args.filename)
     captured = capsys.readouterr()
-    assert captured.out == "track_title: Scape Main\nalbum: RS2\nartist: Jagex\nencoded_by: Lavf58.29.100\n"
+    assert (
+        captured.out
+        == "track_title: Scape Main\nalbum: RS2\nartist: Jagex\nencoded_by: Lavf58.29.100\n"
+    )

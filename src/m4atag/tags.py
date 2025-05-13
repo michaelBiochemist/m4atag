@@ -1,5 +1,6 @@
 from collections import OrderedDict
 
+# "Tag keys in mutagen are not human-readable. This dict maps human-readable keys to mutagen keys."
 tag_lookup = OrderedDict({
     "track_title": "\xa9nam",
     "album": "\xa9alb",
@@ -32,7 +33,6 @@ tag_lookup = OrderedDict({
     "disk_number_total_disks": "disk",
     "cover_art":"covr",
 })
-"Tag keys in mutagen are not human-readable. This dict maps human-readable keys to mutagen keys."
 
-reverse_tag_lookup = OrderedDict({v:k for (k,v) in tag_lookup.items()})
-"This dict allows you to lookup human-readable tags from mutagen keys."
+reverse_tag_lookup = OrderedDict({v: k for (k, v) in tag_lookup.items()})
+# "This dict allows you to lookup human-readable tags from mutagen keys."
