@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #!/usr/bin/env python
 import argparse
 from mutagen.mp4 import MP4,MP4Cover
