@@ -1,50 +1,65 @@
 #!/usr/bin/env python
 import argparse
-from mutagen.mp4 import MP4,MP4Cover
+from mutagen.mp4 import MP4, MP4Cover
 import imghdr as im
-from m4atag.tags import tag_lookup, reverse_tag_lookup
+
+# from m4atag.tags import tag_lookup, reverse_tag_lookup
+from tags import tag_lookup, reverse_tag_lookup
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="M4A Tag Editor")
     parser.add_argument("filename", help="File path to the track.")
 
-    subparsers=parser.add_subparsers(dest="command",required=True)
+    subparsers = parser.add_subparsers(dest="command", required=True)
 
-    parser_get = subparsers.add_parser("get",help="Get tags")
+    parser_get = subparsers.add_parser("get", help="Get tags")
 
-    parser_set = subparsers.add_parser("set",help="Set tags")
+    parser_set = subparsers.add_parser("set", help="Set tags")
     parser_set.add_argument("-t", "--track-title", help="Title of the track")
     parser_set.add_argument("-b", "--album", help="Track Album")
     parser_set.add_argument("-a", "--artist", help="Track Artist")
     parser_set.add_argument("-A", "--album-artist", help="Track Album Artist")
     parser_set.add_argument("-y", "--year", help="Year Album was released")
-    parser_set.add_argument("-T", "--track-number-total-tracks", nargs="+", help="Total number of tracks")
-    parser_set.add_argument("-D", "--disk-number-total-disks", nargs="+", help="Total number of discs")
+    parser_set.add_argument(
+        "-T",
+        "--track-number-total-tracks",
+        nargs="+",
+        help="Track Number & Total number of tracks (Separate two values with a space)",
+    )
+    parser_set.add_argument(
+        "-D",
+        "--disk-number-total-disks",
+        nargs="+",
+        help="Disk Number & Total number of discs (Separate two values with a space)",
+    )
 
-    parser_cov = subparsers.add_parser("im",help="Handle image cover art")
-    parser_cov.add_argument("image_file",help="Name of image file")
+    parser_cov = subparsers.add_parser("im", help="Handle image cover art")
+    parser_cov.add_argument("image_file", help="Name of image file")
     args = parser.parse_args()
     return args
+
 
 def get_cover(file_name):
     im_type = im.what(file_name)
 
-    filetypes = {'jpeg':MP4Cover.FORMAT_JPEG,
-            'png': MP4Cover.FORMAT_PNG}
+    filetypes = {"jpeg": MP4Cover.FORMAT_JPEG, "png": MP4Cover.FORMAT_PNG}
 
     if im_type not in filetypes.keys():
-        print(f'File type {im_type} not suitable for cover art. Acceptable ones are PNG and JPEG')
+        print(
+            f"File type {im_type} not suitable for cover art. Acceptable ones are PNG and JPEG"
+        )
         return None
 
-    with open(file_name,'rb') as O:
-        cov = MP4Cover(O.read(),filetypes[im_type])
+    with open(file_name, "rb") as O:
+        cov = MP4Cover(O.read(), filetypes[im_type])
     return cov
 
-    
+
 def set_image(args):
     mp4_file = MP4(args.filename)
     covr = get_cover(args.image_file)
-    mp4_file['covr'] = [covr]
+    mp4_file["covr"] = [covr]
     mp4_file.save(args.filename)
 
 
@@ -67,9 +82,14 @@ def set_tags(args) -> None:
     for arg in vars(args):
         arg_val = getattr(args, arg)
         if arg in tag_lookup.keys() and arg_val is not None:
-            print(f"Setting tag '{arg}' to '{arg_val}'...")
+            print(f"Setting tag '{arg}' to '{arg_val}' of type {type(arg_val)}...")
             mutagen_tag = tag_lookup[arg]
-            file_tags[mutagen_tag] = arg_val
+            if arg in ["track_number_total_tracks", "disk_number_total_disks"]:
+                a = arg_val
+                a = [int(x) for x in arg_val]
+                file_tags[mutagen_tag] = [a]
+            else:
+                file_tags[mutagen_tag] = arg_val
     file_tags.save(args.filename)
 
 
@@ -83,7 +103,7 @@ def main():
         set_image(args)
     else:
         print("Whee!")
-        
+
     """
     if args.get_tags:
         get_tags(args.filename)
